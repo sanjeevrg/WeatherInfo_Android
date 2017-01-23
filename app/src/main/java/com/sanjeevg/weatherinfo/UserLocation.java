@@ -1,6 +1,7 @@
 package com.sanjeevg.weatherinfo;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.SharedPreferences;
 import java.util.Locale;
 import org.json.JSONObject;
@@ -8,20 +9,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 /**
  * Created by sanjeevg on 21/01/17.
  */
 
-public class UserLocation  {
+public class UserLocation extends Activity  {
+
     SharedPreferences prefs;
 
     public UserLocation(Activity activity){
         prefs = activity.getPreferences(Activity.MODE_PRIVATE);
     }
 
-    // If the user has not chosen a city yet, return
-    // Sydney as the default city
+    // Set Bangalore as default location
     String getCity(){
         return prefs.getString("city", "Bangalore, IN");
     }
@@ -45,33 +48,35 @@ public class UserLocation  {
                 return true;
             }
         }
+
         //Country exists
-        //boolean cityCheck = checkCity(country,city);
+//        boolean cityCheck = checkCity(country,city);
         return  false;
     }
 
-//    boolean checkCity(String country,String city){
+    //Parse local json and check for valid entry
+    boolean checkCity(String country,String city){
+        if(country.equalsIgnoreCase("India")){
+            if(city.equalsIgnoreCase("Bangalore")||city.equalsIgnoreCase(("Delhi")))
+                return true;
+        }else if(country.equalsIgnoreCase("Finland")){
+            if(city.equalsIgnoreCase("Helsinki")||city.equalsIgnoreCase(("Tampere")))
+                return true;
+        }
 //        try
 //        {
 //            JSONObject obj = new JSONObject(loadJSONFromAsset());
-//
-//            JSONArray jarray = (JSONArray) obj.getJSONArray(country);
-//            for(int i=0;i<jarray.length();i++)
-//            {
-//                JSONObject jb =(JSONObject) jarray.get(i);
-//                String formula = jb.getString("formule");
-//
-//            }
-//        } catch (JSONException e) {
+//        }
+//        catch (JSONException e) {
 //            e.printStackTrace();
 //        }
-//        return true;
-//    }
-
+        return false;
+    }
+//
 //    public String loadJSONFromAsset() {
 //        String json = null;
 //        try {
-//            InputStream is = this.getActivity().getAssets().open("listOfCities.json");
+//            InputStream is = getActivity().getAssets().open("listOfCities.json");
 //            int size = is.available();
 //            byte[] buffer = new byte[size];
 //            is.read(buffer);
@@ -84,6 +89,7 @@ public class UserLocation  {
 //        return json;
 //    }
 
+    // Set India as default country
     String getCountry(){
         return prefs.getString("country", "India");
     }

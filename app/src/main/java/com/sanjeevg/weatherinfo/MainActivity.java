@@ -11,7 +11,9 @@ import android.content.DialogInterface;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.widget.TextView;
-import java.lang.Class;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,22 +39,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-		/*int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);*/
         if(item.getItemId() == R.id.change_city){
             showChangeLocationDialog();
         }
         return false;
-
     }
 
-
+    /**
+     * Launches change location dialog
+     *
+     */
     private void showChangeLocationDialog(){
 
         LayoutInflater factory = LayoutInflater.from(this);
@@ -67,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
         changePreference.setTitle("Change Preferred Location");
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-//        changePreference.setView(input);
         changePreference.setView(selectLocationView);
         changePreference.setPositiveButton("Set", new DialogInterface.OnClickListener() {
             @Override
@@ -104,15 +99,14 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean checkCountryCity(String country,String city){
         return (new UserLocation(this).checkValidLocation(country,city));
-
     }
 
     public void changeCity(String country,String city){
-
         WeatherDisplay wf = (WeatherDisplay)getSupportFragmentManager()
                 .findFragmentById(R.id.activity_main);
         wf.changeCity(city);
         new UserLocation(this).setLocation(country,city);
 
     }
+
 }
